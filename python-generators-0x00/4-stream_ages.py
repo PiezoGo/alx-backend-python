@@ -5,7 +5,7 @@ def stream_user_ages():
     conn = mysql.connector.connect(
         host="localhost",
         user="spic3s",
-        password="Piezo55Go!.",
+        password="",
         database="ALX_prodev"
     )
     cursor = conn.cursor()
