@@ -1,6 +1,5 @@
 import sqlite3
-import sqlite3
-
+from datetime import datetime
 # Connect to the same database
 conn = sqlite3.connect('users.db')
 cursor = conn.cursor()
@@ -31,7 +30,8 @@ import functools
 """ YOUR CODE GOES HERE"""
 def log_queries(func):
     def wrapper(query):
-        print(f"[LOG] Executing SQL Query: {query}")
+        timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{timestamp}] Executing SQL Query: {query}")
         return func(query)
     return wrapper
 
