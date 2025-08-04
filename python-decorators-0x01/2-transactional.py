@@ -28,11 +28,10 @@ def with_db_connection(func):
     @functools.wraps(func)
     def wrapper(*args,**kwargs):
         conn = sqlite3.connect('users.db')
-        cursor = conn.cursor()
         try: 
             result = func(conn,*args,**kwargs)
         finally:
-            cursor.close()
+            conn.close()
         return result
     return wrapper
 
@@ -42,7 +41,7 @@ def transactional(func):
         try:
             result = func(conn,*args,**kwargs)
             conn.commit()
-        except:
+        except Exception as e:
             conn.rollback()
             print(f"[ERROR] Transaction failed: {e}")
             raise
