@@ -18,6 +18,7 @@ async def async_fetch_older_users():
             print("👴 Users older than 40:")
             for user in older_users:
                 print(user)
+            return cursor.fetchall()
 
 # Function to run both tasks concurrently
 async def fetch_concurrently():
