@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
-"""
-Unit tests for GithubOrgClient.org
-"""
+
+@patch.object(GithubOrgClient, "org", new_callable=unittest.mock.PropertyMock)
+def test_public_repos_url(self, mock_org):
+    mock_org.return_value = {"repos_url": "https://api.github.com/orgs/test/repos"}
+    client = GithubOrgClient("test")
+    result = client._public_repos_url
+    self.assertEqual(result, "https://api.github.com/orgs/test/repos")
+    mock_org.assert_called_once()
+
 import unittest
 from unittest.mock import patch
 from parameterized import parameterized
