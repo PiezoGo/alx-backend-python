@@ -33,7 +33,9 @@ class TestGithubOrgClient(unittest.TestCase):
             'org',
             new_callable=PropertyMock
         ) as mock_org:
-            mock_org.return_value = {"repos_url": "https://api.github.com/orgs/test/repos"}
+            mock_org.return_value = {
+                "repos_url": "https://api.github.com/orgs/test/repos"
+            }
             client = GithubOrgClient("test")
             self.assertEqual(
                 client._public_repos_url,
@@ -53,7 +55,9 @@ class TestGithubOrgClient(unittest.TestCase):
             '_public_repos_url',
             new_callable=PropertyMock
         ) as mock_url:
-            mock_url.return_value = "https://api.github.com/orgs/test/repos"
+            mock_url.return_value = (
+                "https://api.github.com/orgs/test/repos"
+            )
             client = GithubOrgClient("test")
             self.assertEqual(
                 client.public_repos(),
@@ -87,9 +91,15 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up mock for requests.get"""
-        config = {'return_value.json.side_effect':
-                  [cls.org_payload, cls.repos_payload]}
-        cls.get_patcher = patch('requests.get', **config)
+        def side_effect(url):
+            mock_resp = MagicMock()
+            if url == "https://api.github.com/orgs/test":
+                mock_resp.json.return_value = cls.org_payload
+            elif url == cls.org_payload["repos_url"]:
+                mock_resp.json.return_value = cls.repos_payload
+            return mock_resp
+
+        cls.get_patcher = patch('requests.get', side_effect=side_effect)
         cls.mock_get = cls.get_patcher.start()
 
     @classmethod
