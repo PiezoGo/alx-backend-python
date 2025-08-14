@@ -64,4 +64,15 @@ class TestGithubOrgClient(unittest.TestCase):
             {"name": "repo3"},
         ]
 
-        client = GithubOrgC
+        client = GithubOrgClient("test")
+        result = client.public_repos()
+
+        self.assertEqual(result, ["repo1", "repo2", "repo3"])
+        mock_repos_url.assert_called_once()
+        mock_get_json.assert_called_once_with(
+            "https://api.github.com/orgs/test/repos"
+        )
+
+
+if __name__ == "__main__":
+    unittest.main()
