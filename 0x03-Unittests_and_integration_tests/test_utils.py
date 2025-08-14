@@ -21,7 +21,10 @@ class TestAccessNestedMap(unittest.TestCase):
         ({"a": {"b": 2}}, ("a", "b"), 2),
     ])
     def test_access_nested_map(
-        self, nested_map: Dict[str, Any], path: Tuple[str, ...], expected: Any
+        self,
+        nested_map: Dict[str, Any],
+        path: Tuple[str, ...],
+        expected: Any
     ) -> None:
         """Test correct return values for valid paths."""
         self.assertEqual(access_nested_map(nested_map, path), expected)
@@ -31,7 +34,10 @@ class TestAccessNestedMap(unittest.TestCase):
         ({"a": 1}, ("a", "b"), "'b'"),
     ])
     def test_access_nested_map_exception(
-        self, nested_map: Dict[str, Any], path: Tuple[str, ...], expected_msg: str
+        self,
+        nested_map: Dict[str, Any],
+        path: Tuple[str, ...],
+        expected_msg: str
     ) -> None:
         """Test that KeyError is raised for missing keys."""
         with self.assertRaisesRegex(KeyError, expected_msg):
@@ -45,8 +51,12 @@ class TestGetJson(unittest.TestCase):
         ("http://example.com", {"payload": True}),
         ("http://holberton.io", {"payload": False}),
     ])
-    def test_get_json(self, test_url: str, test_payload: Dict[str, Any]) -> None:
-        """Test that get_json returns expected result from mocked requests.get()."""
+    def test_get_json(
+        self,
+        test_url: str,
+        test_payload: Dict[str, Any]
+    ) -> None:
+        """Test that get_json returns expected result."""
         with patch("requests.get") as mock_get:
             mock_response = Mock()
             mock_response.json.return_value = test_payload
@@ -61,6 +71,7 @@ class TestMemoize(unittest.TestCase):
 
     def test_memoize(self) -> None:
         """Test that memoize calls the method only once."""
+
         class TestClass:
             def a_method(self) -> int:
                 return 42
