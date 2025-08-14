@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
-Unit tests for utils.access_nested_map and utils.get_json.
-Covers Tasks 0, 1, and 2.
+Unit tests for:
+- utils.access_nested_map
+- utils.get_json
+- utils.memoize
 """
 import unittest
 from typing import Any, Dict, Tuple
 from unittest.mock import patch, Mock
 from parameterized import parameterized
-from utils import access_nested_map, get_json
+from utils import access_nested_map, get_json, memoize
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -52,6 +54,28 @@ class TestGetJson(unittest.TestCase):
 
             self.assertEqual(get_json(test_url), test_payload)
             mock_get.assert_called_once_with(test_url)
+
+
+class TestMemoize(unittest.TestCase):
+    """Tests for memoize decorator."""
+
+    def test_memoize(self) -> None:
+        """Test that memoize calls the method only once."""
+        class TestClass:
+            def a_method(self) -> int:
+                return 42
+
+            @memoize
+            def a_property(self) -> int:
+                return self.a_method()
+
+        test_obj = TestClass()
+        with patch.object(TestClass, "a_method", return_value=42) as mock_method:
+            first_call = test_obj.a_property
+            second_call = test_obj.a_property
+            self.assertEqual(first_call, 42)
+            self.assertEqual(second_call, 42)
+            mock_method.assert_called_once()
 
 
 if __name__ == "__main__":
